@@ -1,27 +1,30 @@
 (in-package :basic.linear-space)
 
+(export
+  (defun lst+ (&rest lsts)
+    (if lsts
+      (reduce #'(mapcar-sbs #'+ _ _) lsts)
+      nil)))
 
+(export
+  (defun c*lst (c lst)
+    (mapcar #'(* c _) lst)))
 
-(defun lst+ (&rest lsts)
-  (if lsts
-    (reduce #'(mapcar-sbs #'+ _ _) lsts
-            )
-    nil))
+(export
+  (defun lst- (x y)
+    (lst+ x (c*lst -1 y))))
 
-(defun c*lst (c lst)
-  (mapcar #'(* c _) lst))
+(export
+  (defun lst/c (lst c)
+    (c*lst (/ 1 c) lst)))
 
-(defun lst- (x y)
-  (lst+ x (c*lst -1 y)))
+(export
+  (defun inner-product (x y)
+    (apply #'+ (mapcar-sbs #'* x y))))
 
-(defun lst/c (lst c)
-  (c*lst (/ 1 c) lst))
-
-(defun inner-product (x y)
-  (apply #'+ (mapcar-sbs #'* x y)))
-
-(defun transpose (matrix)
-  (apply #'mapcar #'list matrix))
+(export
+  (defun transpose (matrix)
+    (apply #'mapcar #'list matrix)))
 
 (defun sweep-out (matrix idx)
   (let ((subtractor (make1 (nth idx matrix) idx)))
@@ -40,17 +43,19 @@
     (let ((c (/ 1 (nth idx target))))
       (mapcar #'(* _ c) target)))
 
-(defun print-matrix (matrix &optional (strm *standard-output*))
+(export
+  (defun print-matrix (matrix &optional (strm *standard-output*))
     (let-it-be matrix
-      (format strm "~{|~{~4A~}|~&~}" it)))
+      (format strm "~{|~{~4A~}|~&~}" it))))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
 ;; element of `i` the row must be non-zero. This solver does not tweak
 ;; the input matrix.
-(defun solve (matrix)
-  (do* ((i 0 (1+ i))
-        (matrix (sweep-out matrix i) (sweep-out matrix i)))
-    ((= i (1- (length matrix))) matrix)
-    (terpri)
-    (print-matrix matrix)))
+(export
+  (defun solve (matrix)
+    (do* ((i 0 (1+ i))
+          (matrix (sweep-out matrix i) (sweep-out matrix i)))
+      ((= i (1- (length matrix))) matrix)
+      (terpri)
+      (print-matrix matrix))))

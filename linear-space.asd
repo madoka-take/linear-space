@@ -8,4 +8,5 @@
   :serial t
   :depends-on (:chiku.util)
   :components ((:file "src/packages")
+               (:file "src/utility")
                (:file "src/basic")))
