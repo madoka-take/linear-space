@@ -1,14 +1,6 @@
 (in-package :basic.linear-space)
 
-(defun sweep (target subtractor idx)
-  (let ((c (* (nth idx target)
-              (/ -1 (nth idx subtractor)))))
-    (mapcar #'(+ (car a0) (* c (cdr a0)))
-            (zip target subtractor))))
 
-(defun make1 (target idx)
-  (let ((c (/ 1 (nth idx target))))
-    (mapcar #'(* _ c) target)))
 
 (defun lst+ (&rest lsts)
   (if lsts
@@ -28,6 +20,9 @@
 (defun inner-product (x y)
   (apply #'+ (mapcar-sbs #'* x y)))
 
+(defun transpose (matrix)
+  (apply #'mapcar #'list matrix))
+
 (defun sweep-out (matrix idx)
   (let ((subtractor (make1 (nth idx matrix) idx)))
     (imapcar #'(if (= a0 idx)
@@ -35,10 +30,19 @@
                  (sweep a1 subtractor idx))
              matrix)))
 
+(defun sweep (target subtractor idx)
+  (let ((c (* (nth idx target)
+              (/ -1 (nth idx subtractor)))))
+    (mapcar #'(+ (car a0) (* c (cdr a0)))
+            (zip target subtractor))))
+
+(defun make1 (target idx)
+    (let ((c (/ 1 (nth idx target))))
+      (mapcar #'(* _ c) target)))
 
 (defun print-matrix (matrix &optional (strm *standard-output*))
-  (let-it-be matrix
-    (format strm "~{|~{~4A~}|~&~}" it)))
+    (let-it-be matrix
+      (format strm "~{|~{~4A~}|~&~}" it)))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
@@ -50,6 +54,3 @@
     ((= i (1- (length matrix))) matrix)
     (terpri)
     (print-matrix matrix)))
-
-(defun transpose (matrix)
-  (apply #'mapcar #'list matrix))
