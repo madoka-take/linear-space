@@ -1,4 +1,4 @@
-(in-package :basic)
+(in-package :basic.linear-space)
 
 (defun sweep (target subtractor idx)
   (let ((c (* (nth idx target)

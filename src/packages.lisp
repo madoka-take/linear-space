@@ -1,8 +1,8 @@
 (in-package :cl-user)
 
 ;; TODO: should be renamed
-(defpackage :basic
+(defpackage :basic.linear-space
   (:use :cl chiku.util))
 
-(defpackage :scratch
-  (:use :cl :chiku.util :basic))
+(defpackage :scratch.linear-space
+  (:use :cl :chiku.util :basic.linear-space))
