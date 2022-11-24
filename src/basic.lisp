@@ -44,9 +44,11 @@
       (mapcar #'(* _ c) target)))
 
 (export
-  (defun print-matrix (matrix &optional (strm *standard-output*))
+  (defun print-matrix (matrix &optional column-headline
+                              (strm *standard-output*))
     (let-it-be matrix
-      (format strm "~{|~{~4A~}|~&~}" it))))
+      (format strm "~&~@[|~{~4A~}|~]" column-headline)
+      (format strm "~&~{|~{~4A~}|~&~}" it))))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
