@@ -26,13 +26,6 @@
   (defun transpose (matrix)
     (apply #'mapcar #'list matrix)))
 
-(defun sweep-out (matrix idx)
-  (let ((subtractor (make1 (nth idx matrix) idx)))
-    (imapcar #'(if (= a0 idx)
-                 subtractor
-                 (sweep a1 subtractor idx))
-             matrix)))
-
 (defun sweep (target subtractor idx)
   (let ((c (* (nth idx target)
               (/ -1 (nth idx subtractor)))))
@@ -42,6 +35,13 @@
 (defun make1 (target idx)
     (let ((c (/ 1 (nth idx target))))
       (mapcar #'(* _ c) target)))
+
+(defun sweep-out (matrix idx)
+  (let ((subtractor (make1 (nth idx matrix) idx)))
+    (imapcar #'(if (= a0 idx)
+                 subtractor
+                 (sweep a1 subtractor idx))
+             matrix)))
 
 (export
   (defun print-matrix (matrix &optional column-headline
