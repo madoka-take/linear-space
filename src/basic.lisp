@@ -27,10 +27,10 @@
     (apply #'mapcar #'list matrix)))
 
 (defun sweep (target subtractor idx)
-  (let ((c (* (nth idx target)
-              (/ -1 (nth idx subtractor)))))
-    (mapcar #'(+ (car a0) (* c (cdr a0)))
-            (zip target subtractor))))
+  (lst- target
+        (c*lst (* (nth idx target)
+                  (/ 1 (nth idx subtractor)))
+               subtractor)))
 
 (defun make1 (target idx)
     (let ((c (/ 1 (nth idx target))))
