@@ -50,6 +50,14 @@
       (format strm "~&~@[|~{~4A~}|~]" column-headline)
       (format strm "~&~{|~{~4A~}|~&~}" it))))
 
+(export
+  (defun swap-row (matrix m n)
+    "Swap `m`th row and `n`th row of the given matrix MATRIX. The given
+     MATRIX is NOT modified."
+    (let-it-be (copy-tree matrix)
+      (setf (nth m it) (nth n matrix)
+            (nth n it) (nth m matrix)))))
+
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
 ;; element of `i` the row must be non-zero. This solver does not tweak
