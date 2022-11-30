@@ -61,6 +61,16 @@
       (setf (nth m it) (nth n matrix)
             (nth n it) (nth m matrix)))))
 
+(defun get-subtractor-row (matrix i)
+  (do ((n i (1+ n)))
+    ((not (zerop (element matrix n i)))
+     (values (nth n matrix) n))))
+
+(defun prepare-pivot (matrix i)
+  (mbind (_ row-number) (get-subtractor-row matrix i)
+    (values (swap-row matrix i row-number)
+            (cons i row-number))))
+
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
 ;; element of `i` the row must be non-zero. This solver does not tweak
@@ -68,7 +78,7 @@
 (export
   (defun solve (matrix)
     (do* ((i 0 (1+ i))
-          (matrix (sweep-out matrix i) (sweep-out matrix i)))
-      ((= i (1- (length matrix))) matrix)
-      (terpri)
-      (print-matrix matrix))))
+          (matrix
+            (sweep-out (prepare-pivot matrix 0) 0)
+            (sweep-out (prepare-pivot matrix i) i)))
+      ((= i (1- (length matrix))) matrix))))
