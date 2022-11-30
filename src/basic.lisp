@@ -62,16 +62,11 @@
             (nth n it) (nth m matrix)))))
 
 (defun get-subtractor-row (matrix i)
-  (do ((n i (1+ n)))
-    ((not (zerop (element matrix n i)))
-     (values (nth n matrix) n))))
-
-(defun prepare-pivot (matrix i)
-  (mbind (_ row-number) (get-subtractor-row matrix i)
-    (if (= row-number i)
-      (values matrix nil)
-      (values (swap-row matrix i row-number)
-              (cons i row-number)))))
+  (labels ((rec (n)
+             (cond ((<= (length matrix) n) (values nil nil))
+                   ((zerop (element matrix n i)) (rec (1+ n)))
+                   (t (values (nth n matrix) n)))))
+    (rec i)))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
@@ -79,8 +74,17 @@
 ;; the input matrix.
 (export
   (defun solve (matrix)
-    (do* ((i 0 (1+ i))
-          (matrix
-            (sweep-out (prepare-pivot matrix 0) 0)
-            (sweep-out (prepare-pivot matrix i) i)))
-      ((= i (1- (length matrix))) matrix))))
+    (mvdo (((i) 0 (1+ i))
+           ((row num)
+            (get-subtractor-row matrix 0)
+            (get-subtractor-row matrix (1+ i)))
+           ((matrix)
+            matrix
+            (sweep-out (wrap-if num
+                         (swap-row (requisite matrix) i num))
+                       i)))
+          ((or (= i (1- (length matrix)))
+               (null row))
+           (if row
+             (sweep-out matrix i)
+             matrix)))))
