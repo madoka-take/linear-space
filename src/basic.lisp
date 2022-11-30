@@ -50,6 +50,9 @@
       (format strm "~&~@[|~{~4A~}|~]" column-headline)
       (format strm "~&~{|~{~4A~}|~&~}" it))))
 
+(defun element (matrix row column)
+  (nth column (nth row matrix)))
+
 (export
   (defun swap-row (matrix m n)
     "Swap `m`th row and `n`th row of the given matrix MATRIX. The given
