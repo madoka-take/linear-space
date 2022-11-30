@@ -68,8 +68,10 @@
 
 (defun prepare-pivot (matrix i)
   (mbind (_ row-number) (get-subtractor-row matrix i)
-    (values (swap-row matrix i row-number)
-            (cons i row-number))))
+    (if (= row-number i)
+      (values matrix nil)
+      (values (swap-row matrix i row-number)
+              (cons i row-number)))))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
