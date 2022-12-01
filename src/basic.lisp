@@ -75,9 +75,8 @@
 (export
   (defun solve (matrix)
     (mvdo (((i) 0 (1+ i))
-           ((row num)
-            (get-subtractor-row matrix 0)
-            (get-subtractor-row matrix (1+ i)))
+           ((row num) (get-subtractor-row matrix 0)
+                      (get-subtractor-row matrix (1+ i)))
            ((matrix) matrix
                      (sweep-out (if num
                                   (swap-row matrix i num)
