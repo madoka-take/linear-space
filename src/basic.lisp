@@ -36,11 +36,11 @@
     (let ((c (/ 1 (nth idx target))))
       (mapcar #'(* _ c) target)))
 
-(defun sweep-out (matrix idx)
-  (let ((subtractor (make1 (nth idx matrix) idx)))
-    (imapcar #'(if (= a0 idx)
+(defun sweep-out (matrix row-idx col-idx)
+  (let ((subtractor (make1 (nth row-idx matrix) col-idx)))
+    (imapcar #'(if (= a0 row-idx)
                  subtractor
-                 (sweep a1 subtractor idx))
+                 (sweep a1 subtractor col-idx))
              matrix)))
 
 (export
@@ -61,12 +61,12 @@
       (setf (nth m it) (nth n matrix)
             (nth n it) (nth m matrix)))))
 
-(defun get-subtractor-row (matrix i)
+(defun get-subtractor-row (matrix row-idx col-idx)
   (labels ((rec (n)
              (cond ((<= (length matrix) n) (values nil nil))
-                   ((zerop (element matrix n i)) (rec (1+ n)))
+                   ((zerop (element matrix n col-idx)) (rec (1+ n)))
                    (t (values (nth n matrix) n)))))
-    (rec i)))
+    (rec row-idx)))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list. For each `i` from 0 to `n`, the `i`th
@@ -74,15 +74,22 @@
 ;; the input matrix.
 (export
   (defun solve (matrix)
-    (mvdo (((i) 0 (1+ i))
-           ((_ num) (get-subtractor-row matrix 0)
-                    (get-subtractor-row matrix (1+ i))))
-          ((or (= i (1- (length matrix)))
-               (null num))
+    (mvdo (((col-idx) 0 (1+ col-idx))
+           ((row-idx) 0 (- (1+ col-idx) (length skipped-columns)))
+           ((_ num) (get-subtractor-row matrix 0 0)
+                    (get-subtractor-row matrix (1+ (- col-idx (length skipped-columns)))
+                                        (1+ col-idx)))
+           ((matrix) matrix)
+           ((skipped-columns) '()))
+          ((or (= row-idx (1- (length matrix)))
+               (= col-idx (1- (length (car matrix)))))
            (if num
-             (sweep-out matrix i)
+             (sweep-out matrix row-idx col-idx)
              matrix))
-      (setf matrix (sweep-out (if (= num i)
-                                matrix
-                                (swap-row matrix i num))
-                              i)))))
+      (if num
+        (setf matrix (sweep-out (if (= num row-idx)
+                                  matrix
+                                  (swap-row matrix row-idx num))
+                                row-idx
+                                col-idx))
+        (setf skipped-columns (cons col-idx skipped-columns))))))
