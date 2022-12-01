@@ -74,21 +74,18 @@
 ;; the input matrix.
 (export
   (defun solve (matrix)
-    (mvdo* (((col-idx) 0 (1+ col-idx))
-            ((row-idx) 0 (- col-idx (length skipped-columns)))
-            ((_ num) (get-subtractor-row matrix 0 0)
-                     (get-subtractor-row matrix row-idx col-idx))
-            ((matrix) matrix)
-            ((skipped-columns) '()))
-           ((or (= row-idx (1- (length matrix)))
-                (= col-idx (1- (length (car matrix)))))
-            (if num
-              (sweep-out matrix row-idx col-idx)
-              matrix))
-      (if num
-        (setf matrix (sweep-out (if (= num row-idx)
-                                  matrix
-                                  (swap-row matrix row-idx num))
-                                row-idx
-                                col-idx))
-        (setf skipped-columns (cons col-idx skipped-columns))))))
+    (do* ((col-idx 0 (1+ col-idx))
+          (row-idx 0 (- col-idx (length skipped-columns)))
+          (matrix matrix)
+          (skipped-columns '()))
+      ((or (= row-idx (length matrix))
+           (= col-idx (length (car matrix))))
+       matrix)
+      (mbind (_ num) (get-subtractor-row matrix row-idx col-idx)
+        (if num
+          (setf matrix (sweep-out (if (= num row-idx)
+                                    matrix
+                                    (swap-row matrix row-idx num))
+                                  row-idx
+                                  col-idx))
+          (setf skipped-columns (cons col-idx skipped-columns)))))))
