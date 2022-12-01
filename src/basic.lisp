@@ -82,7 +82,7 @@
            (if num
              (sweep-out matrix i)
              matrix))
-      (setf matrix (sweep-out (if num
-                                (swap-row matrix i num)
-                                matrix)
+      (setf matrix (sweep-out (if (= num i)
+                                matrix
+                                (swap-row matrix i num))
                               i)))))

@@ -11,4 +11,7 @@
   #+nil(print-matrix (solve matrix))
   (print-matrix (solve '((0 0 3)
                          (2 1 4)
-                         (3 4 67)))))
+                         (3 4 67))))
+  (print-matrix (solve '((3 4 67)
+                         (2 1 4)
+                         (0 0 3)))))
