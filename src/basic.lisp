@@ -78,11 +78,11 @@
            ((row num)
             (get-subtractor-row matrix 0)
             (get-subtractor-row matrix (1+ i)))
-           ((matrix)
-            matrix
-            (sweep-out (wrap-if num
-                         (swap-row (requisite matrix) i num))
-                       i)))
+           ((matrix) matrix
+                     (sweep-out (if num
+                                  (swap-row matrix i num)
+                                  matrix)
+                                i)))
           ((or (= i (1- (length matrix)))
                (null row))
            (if row
