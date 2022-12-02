@@ -43,12 +43,21 @@
                  (sweep a1 subtractor col-idx))
              matrix)))
 
+;;; It seems that this printer has already reached the limit of easy
+;;; implementation. The default value of ROW-HEADLINE and
+;;; COLUMN-HEADLINE consume too much characters, the format string might
+;;; be too complex. What if an element of MATRIX requires more than 4
+;;; characters? There are many features a pretty printer might support.
+;;; But to offer such sophisticated features, complete reconstruction
+;;; should be desireable.
 (export
-  (defun print-matrix (matrix &optional column-headline
+  (defun print-matrix (matrix &key (row-headline (iota (length matrix) :start 1))
+                              (column-headline (iota (length (car matrix)) :start 1))
                               (strm *standard-output*))
     (let-it-be matrix
-      (format strm "~&~@[|~{~4A~}|~]" column-headline)
-      (format strm "~&~{|~{~4A~}|~&~}" it))))
+      (format strm "~&~@[  |~{~4A~}|~]" column-headline)
+      (format strm "~&~@[  |~{----~*~}|~]" column-headline)
+      (format strm "~&~:{~2A|~{~4A~}|~&~}" (mapcar #'list row-headline it)))))
 
 (defun element (matrix row column)
   (nth column (nth row matrix)))
