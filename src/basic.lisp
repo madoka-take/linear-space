@@ -69,9 +69,7 @@
     (rec row-idx)))
 
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
-;; represented as a list. For each `i` from 0 to `n`, the `i`th
-;; element of `i` the row must be non-zero. This solver does not tweak
-;; the input matrix.
+;; represented as a list.
 (export
   (defun solve (matrix)
     (do* ((col-idx 0 (1+ col-idx))
