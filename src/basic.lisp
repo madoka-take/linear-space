@@ -55,9 +55,13 @@
                               (column-headline (iota (length (car matrix)) :start 1))
                               (strm *standard-output*))
     (let-it-be matrix
-      (format strm "~&~@[  |~{~4<~A~>~}|~]" column-headline)
-      (format strm "~&~@[  |~{----~*~}|~]" column-headline)
-      (format strm "~&~:{~2<~A~>|~{~4<~A~>~}|~&~}" (mapcar #'list row-headline it)))))
+      (let* ((row-headline-control
+               (format nil "~~~D<~~A~~>"
+                       (apply #'max (mapcar #'(length (format nil "~A" _)) row-headline)))))
+        (format strm "~&~@[~?|~{~4<~A~>~}|~]" row-headline-control '("") column-headline)
+        (format strm "~&~@[~?|~{----~*~}|~]" row-headline-control '("") column-headline)
+        (format strm "~&~:{~?|~{~4<~A~>~}|~&~}"
+                (mapcar #'(list row-headline-control (list _) _) row-headline it))))))
 
 (defun element (matrix row column)
   (nth column (nth row matrix)))
