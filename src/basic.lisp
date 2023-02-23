@@ -55,9 +55,9 @@
                               (column-headline (iota (length (car matrix)) :start 1))
                               (strm *standard-output*))
     (let-it-be matrix
-      (format strm "~&~@[  |~{~4A~}|~]" column-headline)
+      (format strm "~&~@[  |~{~4<~A~>~}|~]" column-headline)
       (format strm "~&~@[  |~{----~*~}|~]" column-headline)
-      (format strm "~&~:{~2A|~{~4A~}|~&~}" (mapcar #'list row-headline it)))))
+      (format strm "~&~:{~2<~A~>|~{~4<~A~>~}|~&~}" (mapcar #'list row-headline it)))))
 
 (defun element (matrix row column)
   (nth column (nth row matrix)))
