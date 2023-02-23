@@ -58,7 +58,7 @@
       (let* ((row-headline-control
                (format nil "~~~D<~~A~~>"
                        (apply #'max (mapcar #'(length (format nil "~A" _)) row-headline)))))
-        (format strm "~&~@[~?|~{~4<~A~>~}|~]" row-headline-control '("") column-headline)
+        (format strm "~&~%~@[~? ~{~4<~A~>~}~]" row-headline-control '("") column-headline)
         (format strm "~&~@[~?|~{----~*~}|~]" row-headline-control '("") column-headline)
         (format strm "~&~:{~?|~{~4<~A~>~}|~&~}"
                 (mapcar #'(list row-headline-control (list _) _) row-headline it))))))
