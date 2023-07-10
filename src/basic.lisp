@@ -106,3 +106,15 @@
 
 (defun zero-vector (len)
   (make-list len :initial-element 0))
+
+;;; The zero-vector appending process is time consuming if the given
+;;; canonicalized-matrix is large.
+(defun list-free-variables (canonicalized-matrix)
+  (loop :for row :in (append1
+                       canonicalized-matrix
+                       (zero-vector (length (car canonicalized-matrix))))
+        :for boundary := 0 :then next-boundary
+        :for next-boundary := (1+ (or (position-if #'(= _ 1) row
+                                                   :start boundary)
+                                      (length row)))
+        :append (iota (- next-boundary (1+ boundary)) :start boundary)))
