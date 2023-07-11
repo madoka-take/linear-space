@@ -107,8 +107,6 @@
 (defun zero-vector (len)
   (make-list len :initial-element 0))
 
-;;; The zero-vector appending process is time consuming if the given
-;;; canonicalized-matrix is large.
 (defun list-free-variables (canonicalized-matrix)
   (labels ((search-boundary (row start-from)
              (or (position 1 row :start start-from)
