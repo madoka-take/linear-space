@@ -173,3 +173,9 @@
           (remove-if #'zero-vector-p canonicalized-matrix)
           free-indices)
         free-indices))))
+
+(defun solution-basis (canonicalized-matrix)
+  (mbind (matrix free-indices) (solution-matrix canonicalized-matrix)
+    (mapcar (lambda (free-idx)
+              (mapcar #'(nth free-idx _) matrix))
+            free-indices)))
