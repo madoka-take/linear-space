@@ -121,3 +121,12 @@
                  (setf it
                        (nconc (iota (- end (1+ start)) :start (1+ start))
                               it)))))
+
+(defun list-free-variables-2 (canonicalized-matrix)
+  (sort (nset-difference
+          (iota (length (car canonicalized-matrix)))
+          (reduce (lambda (acc row)
+                    (cons (search-boundary row (1+ (car acc))) acc))
+                  (remove-if #'zero-vector-p canonicalized-matrix)
+                  :initial-value '(-1)))
+        #'<))
