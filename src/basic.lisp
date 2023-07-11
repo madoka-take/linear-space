@@ -130,3 +130,19 @@
                   (remove-if #'zero-vector-p canonicalized-matrix)
                   :initial-value '(-1)))
         #'<))
+
+;;; TODO: In the usage of the structure it returns, arrays might be a
+;;; suitable choice because the randam access could be convenient.
+(defun variable-type-list (canonicalized-matrix)
+  (let ((solution-dimension (length (car canonicalized-matrix))))
+    (labels ((rec (n acc dependent-idx equations)
+               (cond ((= n solution-dimension) (nreverse acc))
+                     ((null dependent-idx)
+                      (nreconc acc (make-list (- solution-dimension n))))
+                     ((= n dependent-idx)
+                      (rec (1+ n) (cons t acc)
+                           (search-boundary (car equations) (1+ n))
+                           (cdr equations)))
+                     (t (rec (1+ n) (cons nil acc) dependent-idx equations)))))
+
+      (cdr (rec -1 nil -1 (remove-if #'zero-vector-p canonicalized-matrix))))))
