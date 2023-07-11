@@ -146,3 +146,30 @@
                      (t (rec (1+ n) (cons nil acc) dependent-idx equations)))))
 
       (cdr (rec -1 nil -1 (remove-if #'zero-vector-p canonicalized-matrix))))))
+
+(defun negative-unit-vector (dim i)
+  (let-it-be (make-list dim :initial-element 0)
+    (setf (elt it i) -1)))
+
+(defun solution-matrix (canonicalized-matrix)
+  (let ((solution-dimension (length (car canonicalized-matrix)))
+        (free-indices (list-free-variables canonicalized-matrix)))
+    (labels ((rec (n acc equations free-indices)
+               (cond ((null equations)
+                      (nreconc acc
+                               (mapcar #'(negative-unit-vector solution-dimension _)
+                                       free-indices)))
+                     ((null free-indices) (nreconc acc equations))
+                     ((= n (car free-indices))
+                      (rec (1+ n)
+                           (cons (negative-unit-vector solution-dimension n)
+                                 acc)
+                           equations
+                           (cdr free-indices)))
+                     (t (rec (1+ n) (cons (car equations) acc)
+                             (cdr equations) free-indices)))))
+      (values
+        (rec 0 ()
+          (remove-if #'zero-vector-p canonicalized-matrix)
+          free-indices)
+        free-indices))))
