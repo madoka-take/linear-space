@@ -112,17 +112,14 @@
 (defun list-free-variables (canonicalized-matrix)
   (labels ((search-boundary (row start-from)
              (or (position 1 row :start start-from)
-                 (length row)))
-           (calc-free-indices (cur next)
-             (iota (- next (1+ cur)) :start (1+ cur))))
-    (do* ((matrix canonicalized-matrix (cdr matrix))
-           (boundary -1 next)
-           row next result)
-      ((null matrix)
-        (nreverse
-          (nreconc (calc-free-indices
-                     next (length (car canonicalized-matrix)))
-                   result)))
-      (setf row (car matrix))
-      (setf next (search-boundary row (1+ boundary)))
-      (setf result (nreconc (calc-free-indices boundary next) result)))))
+                 (length row))))
+    (let-it-be nil
+      (do-tuples/o (end start)
+        (cons (length (car canonicalized-matrix))
+              (reduce (lambda (acc item)
+                        (cons (search-boundary item (1+ (car acc)))
+                              acc))
+                      canonicalized-matrix :initial-value '(-1)))
+        (setf it
+              (nconc (iota (- end (1+ start)) :start (1+ start))
+                     it))))))
