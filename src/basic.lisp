@@ -110,11 +110,19 @@
 ;;; The zero-vector appending process is time consuming if the given
 ;;; canonicalized-matrix is large.
 (defun list-free-variables (canonicalized-matrix)
-  (loop :for row :in (append1
-                       canonicalized-matrix
-                       (zero-vector (length (car canonicalized-matrix))))
-        :for boundary := 0 :then next-boundary
-        :for next-boundary := (1+ (or (position-if #'(= _ 1) row
-                                                   :start boundary)
-                                      (length row)))
-        :append (iota (- next-boundary (1+ boundary)) :start boundary)))
+  (labels ((search-boundary (row start-from)
+             (or (position 1 row :start start-from)
+                 (length row)))
+           (calc-free-indices (cur next)
+             (iota (- next (1+ cur)) :start (1+ cur))))
+    (do* ((matrix canonicalized-matrix (cdr matrix))
+           (boundary -1 next)
+           row next result)
+      ((null matrix)
+        (nreverse
+          (nreconc (calc-free-indices
+                     next (length (car canonicalized-matrix)))
+                   result)))
+      (setf row (car matrix))
+      (setf next (search-boundary row (1+ boundary)))
+      (setf result (nreconc (calc-free-indices boundary next) result)))))
