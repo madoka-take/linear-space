@@ -107,17 +107,17 @@
 (defun zero-vector (len)
   (make-list len :initial-element 0))
 
+(defun search-boundary (row start-from)
+  (or (position 1 row :start start-from)
+      (length row)))
 (defun list-free-variables (canonicalized-matrix)
-  (labels ((search-boundary (row start-from)
-             (or (position 1 row :start start-from)
-                 (length row))))
-    (let-it-be nil
-      (do-tuples/o (end start)
-        (cons (length (car canonicalized-matrix))
-              (reduce (lambda (acc item)
-                        (cons (search-boundary item (1+ (car acc)))
-                              acc))
-                      canonicalized-matrix :initial-value '(-1)))
-        (setf it
-              (nconc (iota (- end (1+ start)) :start (1+ start))
-                     it))))))
+  (let-it-be nil
+    (do-tuples/o (end start)
+                 (cons (length (car canonicalized-matrix))
+                       (reduce (lambda (acc item)
+                                 (cons (search-boundary item (1+ (car acc)))
+                                       acc))
+                               canonicalized-matrix :initial-value '(-1)))
+                 (setf it
+                       (nconc (iota (- end (1+ start)) :start (1+ start))
+                              it)))))
