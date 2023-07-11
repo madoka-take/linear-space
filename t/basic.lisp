@@ -70,3 +70,8 @@
 
 (equal (list-free-variables '((0 1 0 0 0)))
        '(0 2 3 4))
+
+(equal (list-free-variables '((1 2 0 0)
+                              (0 0 1 0)
+                              (0 0 0 1)))
+       (1))
