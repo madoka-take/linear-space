@@ -84,7 +84,7 @@
 ;; Matrix is a list of some horizontal vectors. A horizontal vector is
 ;; represented as a list.
 (export
-  (defun solve (matrix)
+  (defun row-canonicalize (matrix)
     (do* ((col-idx 0 (1+ col-idx))
           (row-idx 0 (- col-idx (length skipped-columns)))
           (matrix matrix)
