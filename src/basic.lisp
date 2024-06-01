@@ -188,3 +188,9 @@
         :collect (nconc (make-list (1- i) :initial-element 0)
                         (list 1)
                         (make-list (- n i) :initial-element 0))))
+
+(export
+  (defun c*matrix (c mat)
+    "Scalar multiplation of the given matrix MAT is returned. C must be
+     a scalar."
+    (MAPCAR #'(c*lst c _) mat)))
