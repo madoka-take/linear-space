@@ -194,3 +194,10 @@
     "Scalar multiplation of the given matrix MAT is returned. C must be
      a scalar."
     (MAPCAR #'(c*lst c _) mat)))
+
+(defun mat+mat (A B)
+  (mapcar #'(mapcar #'+ _ _) A B))
+
+(export
+  (defun add-matrices (A &rest matrices)
+    (reduce #'mat+mat matrices :initial-value A)))
