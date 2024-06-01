@@ -217,3 +217,11 @@
 (export
   (defun multiply-matrices (A &rest matrices)
     (reduce #'mat*mat matrices :initial-value A)))
+
+(export
+  (defun exponentiate-matrix (base exponent)
+    "It returns BASE power of EXPONENT. BASE must be a square matrix,
+     and EXPONENT must be a natural number."
+    (let-it-be (identity-matrix (length base))
+      (dotimes (i exponent)
+        (setf it (mat*mat it base))))))
