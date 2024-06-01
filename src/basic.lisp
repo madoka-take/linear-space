@@ -201,3 +201,7 @@
 (export
   (defun add-matrices (A &rest matrices)
     (reduce #'mat+mat matrices :initial-value A)))
+
+(defun subtract-matrix (A B)
+  "A - B is returned. A is the minuend and B is the subtrahend."
+  (mat+mat A (c*matrix -1 B)))
