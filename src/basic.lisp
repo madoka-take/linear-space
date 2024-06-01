@@ -205,3 +205,15 @@
 (defun subtract-matrix (A B)
   "A - B is returned. A is the minuend and B is the subtrahend."
   (mat+mat A (c*matrix -1 B)))
+
+(defun mat*mat (A B)
+  (let ((trans-B (transpose B)))
+    (mapcar (lambda (a-)
+              (mapcar #'(inner-product a- _) trans-B))
+            A)))
+
+;;; We cannot offer zero-argument version because we cannot decide the
+;;; size of identity matrix it returns.
+(export
+  (defun multiply-matrices (A &rest matrices)
+    (reduce #'mat*mat matrices :initial-value A)))
