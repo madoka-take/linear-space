@@ -101,8 +101,9 @@
                                   col-idx))
           (setf skipped-columns (cons col-idx skipped-columns)))))))
 
-(defun zero-vector-p (lst)
-  (every #'zerop lst))
+(export
+  (defun zero-vector-p (lst)
+    (every #'zerop lst)))
 
 (defun zero-vector (len)
   (make-list len :initial-element 0))
