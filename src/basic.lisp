@@ -185,6 +185,10 @@
               free-indices))))
 
 (export
+  (defun matrix-dimension (A)
+    (cons (length A) (length (car A)))))
+
+(export
   (defun identity-matrix (n)
     (loop :for i := 1 :then (1+ i)
           :until (< n i)
