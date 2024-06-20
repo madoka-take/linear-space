@@ -189,6 +189,11 @@
     (cons (length A) (length (car A)))))
 
 (export
+  (defun matrix-equal (A B)
+    (and (equal (matrix-dimension A) (matrix-dimension B))
+         (every #'(every #'eql _ _) A B))))
+
+(export
   (defun identity-matrix (n)
     (loop :for i := 1 :then (1+ i)
           :until (< n i)
