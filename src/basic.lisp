@@ -105,8 +105,9 @@
   (defun zero-vector-p (lst)
     (every #'zerop lst)))
 
-(defun zero-vector (len)
-  (make-list len :initial-element 0))
+(export
+  (defun zero-vector (len)
+    (make-list len :initial-element 0)))
 
 (defun search-boundary (row start-from)
   (or (position 1 row :start start-from)
