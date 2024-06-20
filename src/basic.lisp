@@ -228,3 +228,7 @@
     (let-it-be (identity-matrix (length base))
       (dotimes (i exponent)
         (setf it (mat*mat it base))))))
+
+(export
+  (defun mat*vec (A v)
+    (apply #'append (mat*mat A (mapcar #'list v)))))
