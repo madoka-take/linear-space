@@ -182,12 +182,13 @@
                 (mapcar #'(nth free-idx _) matrix))
               free-indices))))
 
-(defun identity-matrix (n)
-  (loop :for i := 1 :then (1+ i)
-        :until (< n i)
-        :collect (nconc (make-list (1- i) :initial-element 0)
-                        (list 1)
-                        (make-list (- n i) :initial-element 0))))
+(export
+  (defun identity-matrix (n)
+    (loop :for i := 1 :then (1+ i)
+          :until (< n i)
+          :collect (nconc (make-list (1- i) :initial-element 0)
+                          (list 1)
+                          (make-list (- n i) :initial-element 0)))))
 
 (export
   (defun c*matrix (c mat)
